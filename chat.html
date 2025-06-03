@@ -451,8 +451,19 @@ function checkHolidayToday() {
   }
 }
 
+  let apiKey = "";
 
-    const apiKey = "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"; // ← ضع مفتاح API الحقيقي هنا
+  fetch("config.json")
+    .then(res => res.json())
+    .then(config => {
+      apiKey = config.openai_key;
+    })
+    .catch(err => {
+      console.error("فشل تحميل config.json", err);
+    });
+
+
+
 // 📦 نصائح يومية
 const dailyTips = [
   "🧠 نصيحة اليوم: خمم قبل ما تجاوب، الذكاء صبر ✨",
@@ -671,6 +682,10 @@ const dzStudyLevels = [
 ];
 
 async function sendMessage() {
+  if (!apiKey) {
+  alert("🔐 المفتاح غير جاهز بعد. انتظر لحظة ثم جرب من جديد.");
+  return;
+}
   const userInput = document.getElementById("user-input").value;
   for (const level of dzStudyLevels) {
   if (level.keywords.some(k => userInput.toLowerCase().includes(k))) {
